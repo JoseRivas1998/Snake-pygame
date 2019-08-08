@@ -4,6 +4,7 @@ import pygame
 from pygame.surface import Surface
 from gamestatemanager import GameStateManager
 from gamestatetype import GameStateType
+from input import MyInput, MyInputProcessor
 
 # CONSTANTS
 BLACK = (0, 0, 0)
@@ -29,7 +30,7 @@ class App:
         pygame.init()
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption(self.window_title)
-        self.gsm = GameStateManager(GameStateType.PLAY)
+        self.gsm = GameStateManager(GameStateType.TITLE)
         self.last_time = 0
         self.running = True
         self.game_loop()
@@ -38,11 +39,20 @@ class App:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+            if event.type == pygame.KEYDOWN:
+                MyInputProcessor.key_down(event.key)
+            if event.type == pygame.KEYUP:
+                MyInputProcessor.key_up(event.key)
         pass
 
     def step(self):
+        self.screen.fill((0xD2, 0xD2, 0xD2))
         self.poll_event()
         self.gsm.step(self.screen, self.size, self.delta_time)
+        MyInput.update()
+        pygame.display.flip()
+        if self.gsm.should_exit:
+            self.exit()
 
     def calculate_delta_time(self):
         current_time = pygame.time.get_ticks()
@@ -53,3 +63,6 @@ class App:
         while self.running:
             self.calculate_delta_time()
             self.step()
+
+    def exit(self):
+        self.running = False

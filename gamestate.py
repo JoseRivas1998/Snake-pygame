@@ -1,18 +1,18 @@
 from abc import ABC, abstractmethod
 from typing import Tuple
 
-from gamestatemanager import GameStateManager
-from gamestatetype import GameStateType
-
 from pygame.surface import Surface
 
+from gamestatetype import GameStateType
+
+
 class GameState(ABC):
-    gsm:GameStateManager
 
-    def __init__(self, gsm:GameStateManager):
+    def __init__(self, gsm):
         self.gsm = gsm
+        self.init()
 
-    def switch_state(self, type:GameStateType):
+    def switch_state(self, type: GameStateType):
         self.gsm.switch_state(type)
 
     @abstractmethod
@@ -28,5 +28,5 @@ class GameState(ABC):
         pass
 
     @abstractmethod
-    def draw(self, surface:Surface, screen_size: Tuple[float, float], delta_time):
+    def draw(self, surface: Surface, screen_size: Tuple[float, float], delta_time):
         pass

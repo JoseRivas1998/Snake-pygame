@@ -1,4 +1,5 @@
-from pygame.color import Color
+from typing import Tuple
+
 from pygame.draw import rect
 from pygame.rect import Rect
 from pygame.surface import Surface
@@ -33,5 +34,5 @@ class Rectangle:
         b4 = self.y + self.height > r.y
         return b1 and b2 and b3 and b4
 
-    def display(self, surface: Surface, color: Color):
+    def display(self, surface: Surface, color: Tuple[int, int, int]):
         rect(surface, color, Rect(self.x, self.y, self.width, self.height))
